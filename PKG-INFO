@@ -1,3 +1,15 @@
+Metadata-Version: 2.4
+Name: class-roster-simulator
+Version: 0.1.0
+Summary: 模拟当前小学六年级班级成员并打印花名册
+Author: Class Roster Simulator Contributors
+License: MIT
+Requires-Python: >=3.10
+Requires-Dist: alt-generate-zh-name @ git+https://github.com/ashida2016/alt_generate_zh_name.git@66ab3ebc6d3911677177b63971088d8b2273be9e
+Provides-Extra: dev
+Requires-Dist: pytest<9.0,>=8.0; extra == 'dev'
+Description-Content-Type: text/markdown
+
 # 小学六年级班级花名册模拟器
 
 这是一个使用 Python 3.10 开发的命令行小程序。它调用

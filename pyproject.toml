@@ -1,0 +1,45 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "class-roster-simulator"
+version = "0.1.0"
+description = "模拟当前小学六年级班级成员并打印花名册"
+readme = "ReadMe.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Class Roster Simulator Contributors" },
+]
+dependencies = [
+    "alt_generate_zh_name @ git+https://github.com/ashida2016/alt_generate_zh_name.git@66ab3ebc6d3911677177b63971088d8b2273be9e",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0,<9.0",
+]
+
+[project.scripts]
+class-roster = "class_roster.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/class_roster"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/ReadMe.md",
+    "/pyproject.toml",
+    "/requirements.txt",
+    "/src",
+    "/tests",
+]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.pytest.ini_options]
+addopts = "-q"
+pythonpath = ["src"]
+testpaths = ["tests"]

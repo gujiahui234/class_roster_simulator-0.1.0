@@ -1,0 +1,3 @@
+# 学生基础信息生成包（固定提交，确保安装结果可复现）
+alt_generate_zh_name @ git+https://github.com/ashida2016/alt_generate_zh_name.git@66ab3ebc6d3911677177b63971088d8b2273be9e
+
