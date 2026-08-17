@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "class-roster-simulator"
-version = "0.1.0"
+version = "0.1.1"
 description = "按指定出生日期范围模拟班级成员并打印花名册"
 readme = "README.md"
 requires-python = ">=3.10"
