@@ -38,7 +38,7 @@ def build_parser() -> argparse.ArgumentParser:
     """
 
     parser = argparse.ArgumentParser(
-        description="模拟当前小学六年级的班级成员并打印花名册。",
+        description="模拟班级成员，可限定出生日期范围，并打印花名册。",
     )
     parser.add_argument(
         "--size",
@@ -59,6 +59,18 @@ def build_parser() -> argparse.ArgumentParser:
         metavar="YYYY-MM-DD",
         help="模拟依据日期（默认：今天）",
     )
+    parser.add_argument(
+        "--birth-start",
+        default=None,
+        metavar="DATE",
+        help="出生日期范围起点，格式为 YYYY、YYYY-MM 或 YYYY-MM-DD",
+    )
+    parser.add_argument(
+        "--birth-end",
+        default=None,
+        metavar="DATE",
+        help="出生日期范围终点，格式为 YYYY、YYYY-MM 或 YYYY-MM-DD",
+    )
     return parser
 
 
@@ -74,10 +86,15 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     parser = build_parser()
     args = parser.parse_args(argv)
-    if args.size < 1:
-        parser.error("--size 必须大于 0")
-
-    roster = simulate_class(size=args.size, seed=args.seed, as_of=args.as_of)
+    try:
+        roster = simulate_class(
+            size=args.size,
+            seed=args.seed,
+            as_of=args.as_of,
+            birth_start=args.birth_start,
+            birth_end=args.birth_end,
+        )
+    except ValueError as error:
+        parser.error(str(error))
     print(roster.render())
     return 0
-

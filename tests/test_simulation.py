@@ -8,20 +8,30 @@ import pytest
 from class_roster import simulation
 
 
-def test_academic_year_changes_in_september() -> None:
-    """9 月开始新的学年。"""
+@pytest.mark.parametrize(
+    ("birth_start", "birth_end", "expected"),
+    [
+        ("2014", "2014", (dt.date(2014, 1, 1), dt.date(2014, 12, 31))),
+        (
+            "2014-03",
+            "2014-05",
+            (dt.date(2014, 3, 1), dt.date(2014, 5, 31)),
+        ),
+        (
+            "2014-04-15",
+            "2014-04-15",
+            (dt.date(2014, 4, 15), dt.date(2014, 4, 15)),
+        ),
+    ],
+)
+def test_normalize_birth_range(
+    birth_start: str,
+    birth_end: str,
+    expected: tuple[dt.date, dt.date],
+) -> None:
+    """年、年月和完整日期都能转换为准确的闭区间。"""
 
-    assert simulation.academic_year_start(dt.date(2026, 8, 31)) == 2025
-    assert simulation.academic_year_start(dt.date(2026, 9, 1)) == 2026
-
-
-def test_grade_six_birth_range_for_current_school_year() -> None:
-    """2025-2026 学年对应六年级常见出生区间。"""
-
-    assert simulation.grade_six_birth_range(dt.date(2026, 7, 31)) == (
-        dt.date(2013, 9, 1),
-        dt.date(2014, 8, 31),
-    )
+    assert simulation.normalize_birth_range(birth_start, birth_end) == expected
 
 
 def test_simulate_class_maps_generated_students(
@@ -49,16 +59,65 @@ def test_simulate_class_maps_generated_students(
         2,
         seed=42,
         as_of=dt.date(2026, 7, 31),
+        birth_start="2008-09",
+        birth_end="2010-08",
     )
 
     assert captured == {
         "size": 2,
-        "birth_start": dt.date(2013, 9, 1),
-        "birth_end": dt.date(2014, 8, 31),
+        "birth_start": dt.date(2008, 9, 1),
+        "birth_end": dt.date(2010, 8, 31),
         "seed": 42,
     }
     assert [student.number for student in roster.students] == [1, 2]
     assert [student.name for student in roster.students] == ["张小明", "李小红"]
+    assert roster.birth_start == dt.date(2008, 9, 1)
+    assert roster.birth_end == dt.date(2010, 8, 31)
+
+
+def test_simulate_class_does_not_apply_a_grade_limit(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """未指定范围时不向生成器添加固定年级的出生日期限制。"""
+
+    captured: dict[str, object] = {}
+
+    def fake_generate(size: int, **kwargs: object) -> pd.DataFrame:
+        captured.update(kwargs)
+        return pd.DataFrame(
+            [{"姓名": "王一", "性别": "男", "生日": dt.date(2000, 1, 1)}]
+        )
+
+    monkeypatch.setattr(simulation, "generate", fake_generate)
+
+    roster = simulation.simulate_class(1, seed=7)
+
+    assert captured == {"seed": 7}
+    assert roster.birth_start is None
+    assert roster.birth_end is None
+
+
+@pytest.mark.parametrize(
+    ("birth_start", "birth_end", "message"),
+    [
+        ("2014", None, "必须同时指定"),
+        ("2015", "2014", "起点不能晚于终点"),
+        ("2014/01", "2014-12", "必须采用"),
+    ],
+)
+def test_simulate_class_rejects_invalid_birth_range(
+    birth_start: str | None,
+    birth_end: str | None,
+    message: str,
+) -> None:
+    """不完整、倒置或格式错误的出生日期范围会被拒绝。"""
+
+    with pytest.raises(ValueError, match=message):
+        simulation.simulate_class(
+            1,
+            birth_start=birth_start,
+            birth_end=birth_end,
+        )
 
 
 def test_simulate_class_rejects_non_positive_size() -> None:
@@ -66,4 +125,3 @@ def test_simulate_class_rejects_non_positive_size() -> None:
 
     with pytest.raises(ValueError, match="大于 0"):
         simulation.simulate_class(0)
-

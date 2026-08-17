@@ -45,16 +45,14 @@ class ClassRoster:
 
     Attributes:
         as_of: 模拟所依据的日期。
-        academic_year_start: 当前学年的起始年份。
-        birth_start: 模拟学生出生日期范围的起点。
-        birth_end: 模拟学生出生日期范围的终点。
+        birth_start: 指定的出生日期范围起点；未限定时为 ``None``。
+        birth_end: 指定的出生日期范围终点；未限定时为 ``None``。
         students: 班级学生，按学号排列。
     """
 
     as_of: dt.date
-    academic_year_start: int
-    birth_start: dt.date
-    birth_end: dt.date
+    birth_start: dt.date | None
+    birth_end: dt.date | None
     students: tuple[Student, ...]
 
     def render(self) -> str:
@@ -64,17 +62,16 @@ class ClassRoster:
             包含班级摘要和全体学生信息的多行文本。
         """
 
+        birth_range = "未限定"
+        if self.birth_start is not None and self.birth_end is not None:
+            birth_range = (
+                f"{self.birth_start.isoformat()} 至 {self.birth_end.isoformat()}"
+            )
+
         lines = [
-            "小学六年级班级花名册",
+            "班级花名册",
             f"统计日期：{self.as_of.isoformat()}",
-            (
-                f"学年：{self.academic_year_start}-"
-                f"{self.academic_year_start + 1} 学年"
-            ),
-            (
-                f"出生日期范围：{self.birth_start.isoformat()} 至 "
-                f"{self.birth_end.isoformat()}"
-            ),
+            f"出生日期范围：{birth_range}",
             f"班级人数：{len(self.students)} 人",
             "",
             "学号\t姓名\t性别\t出生日期\t年龄",
@@ -88,4 +85,3 @@ class ClassRoster:
             for student in self.students
         )
         return "\n".join(lines)
-

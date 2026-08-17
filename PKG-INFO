@@ -1,7 +1,7 @@
 Metadata-Version: 2.4
 Name: class-roster-simulator
 Version: 0.1.0
-Summary: 模拟当前小学六年级班级成员并打印花名册
+Summary: 按指定出生日期范围模拟班级成员并打印花名册
 Author: Class Roster Simulator Contributors
 License: MIT
 Requires-Python: >=3.10
@@ -10,113 +10,9 @@ Provides-Extra: dev
 Requires-Dist: pytest<9.0,>=8.0; extra == 'dev'
 Description-Content-Type: text/markdown
 
-# 小学六年级班级花名册模拟器
+# 班级花名册模拟器
 
-这是一个使用 Python 3.10 开发的命令行小程序。它调用
-[`alt_generate_zh_name`](https://github.com/ashida2016/alt_generate_zh_name)
-生成学生姓名、性别和生日，模拟当前小学六年级的班级成员，并在终端打印
-完整花名册。
+生成虚构的学生姓名、性别和生日。程序不限定年级，可通过
+`--birth-start` 和 `--birth-end` 按年、年月或具体日期限定出生日期范围。
 
-## 功能
-
-- 默认模拟 40 名六年级学生；
-- 根据运行日期自动识别当前学年；
-- 按 9 月 1 日入学分界推算六年级学生的常见出生日期范围；
-- 打印学号、姓名、性别、出生日期和周岁；
-- 支持自定义班级人数、随机种子和模拟日期；
-- 使用随机种子复现同一份名单。
-
-> 出生日期范围采用常规入学年龄进行模拟，不涵盖提前入学、延迟入学或
-> 留级等个别情况。生成的所有学生信息均为虚构数据。
-
-## 环境要求
-
-- Python 3.10 或更高版本
-- Git（安装 GitHub 源码依赖时需要）
-
-## 安装
-
-建议先创建虚拟环境。
-
-```bash
-python -m venv .venv
-```
-
-PowerShell：
-
-```powershell
-.\.venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-python -m pip install -e .
-```
-
-也可以一次安装项目及测试依赖：
-
-```bash
-python -m pip install -e ".[dev]"
-```
-
-`pyproject.toml` 和 `requirements.txt` 均将基础信息包固定到已核实的
-Git 提交，以保证安装结果可复现。
-
-## 使用
-
-安装项目后直接运行：
-
-```bash
-class-roster
-```
-
-也可以通过 Python 模块运行：
-
-```bash
-python -m class_roster
-```
-
-指定 45 人、随机种子和模拟日期：
-
-```bash
-class-roster --size 45 --seed 2026 --as-of 2026-07-31
-```
-
-查看全部参数：
-
-```bash
-class-roster --help
-```
-
-输出示意：
-
-```text
-小学六年级班级花名册
-统计日期：2026-07-31
-学年：2025-2026 学年
-出生日期范围：2013-09-01 至 2014-08-31
-班级人数：40 人
-
-学号    姓名    性别    出生日期      年龄
-01      张小明  男      2014-02-03    12
-...
-```
-
-## 测试
-
-```bash
-python -m pytest
-```
-
-## 项目结构
-
-```text
-.
-├── pyproject.toml
-├── requirements.txt
-├── ReadMe.md
-├── src/
-│   └── class_roster/
-│       ├── cli.py
-│       ├── models.py
-│       └── simulation.py
-└── tests/
-```
+完整安装和使用说明见 `README.md`。

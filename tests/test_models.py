@@ -19,7 +19,6 @@ def test_roster_render_contains_every_student() -> None:
 
     roster = ClassRoster(
         as_of=dt.date(2026, 7, 31),
-        academic_year_start=2025,
         birth_start=dt.date(2013, 9, 1),
         birth_end=dt.date(2014, 8, 31),
         students=(
@@ -30,9 +29,23 @@ def test_roster_render_contains_every_student() -> None:
 
     rendered = roster.render()
 
-    assert "小学六年级班级花名册" in rendered
+    assert "班级花名册" in rendered
+    assert "六年级" not in rendered
+    assert "学年" not in rendered
     assert "班级人数：2 人" in rendered
     assert "学号\t姓名\t性别\t出生日期\t年龄" in rendered
     assert "01\t张小明\t男\t2014-02-03\t12" in rendered
     assert "02\t李小红\t女\t2013-10-04\t12" in rendered
 
+
+def test_roster_render_marks_unlimited_birth_range() -> None:
+    """未指定出生日期范围时，摘要明确显示未限定。"""
+
+    roster = ClassRoster(
+        as_of=dt.date(2026, 7, 31),
+        birth_start=None,
+        birth_end=None,
+        students=(),
+    )
+
+    assert "出生日期范围：未限定" in roster.render()
