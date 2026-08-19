@@ -20,6 +20,10 @@ def _iso_date(value: str) -> dt.date:
 
     Raises:
         argparse.ArgumentTypeError: 参数不是有效的 ISO 日期。
+
+    Example:
+        >>> _iso_date("2026-08-19")
+        datetime.date(2026, 8, 19)
     """
 
     try:
@@ -35,6 +39,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     Returns:
         配置完成的参数解析器。
+
+    Example:
+        >>> parser = build_parser()
+        >>> parser.parse_args(["--size", "12"]).size
+        12
     """
 
     parser = argparse.ArgumentParser(
@@ -82,6 +91,19 @@ def main(argv: Sequence[str] | None = None) -> int:
 
     Returns:
         进程退出码；成功时为 0。
+
+    Example:
+        下面的调用等价于执行 ``class-roster --size 2 --seed 7``：
+
+        >>> from contextlib import redirect_stdout
+        >>> from io import StringIO
+        >>> output = StringIO()
+        >>> with redirect_stdout(output):
+        ...     exit_code = main(["--size", "2", "--seed", "7"])
+        >>> exit_code
+        0
+        >>> "班级人数：2 人" in output.getvalue()
+        True
     """
 
     parser = build_parser()

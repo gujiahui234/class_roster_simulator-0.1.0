@@ -1,0 +1,28 @@
+# Class Roster Simulator
+
+> A fully typed Python package and CLI for generating fictional Chinese class rosters, optionally constrained by an inclusive birth-date range.
+
+Use this file as the entry point when an AI agent needs to understand the package.
+
+## Primary documentation
+
+- [README](README.md): installation, CLI usage, Python API, and behavior
+- [AI usage guide](AI_USAGE.md): package contract, repository map, development workflow, and validation commands
+- [Runnable example](examples/basic_roster.py): minimal application scaffold
+
+## Source and tests
+
+- [Public API](src/class_roster/__init__.py): exported Python names
+- [Simulation](src/class_roster/simulation.py): date normalization and roster generation
+- [Models](src/class_roster/models.py): `Student` and `ClassRoster`
+- [CLI](src/class_roster/cli.py): argument parser and command entry point
+- [Tests](tests/): executable behavior and distribution-contract checks
+
+## Key constraints
+
+- Python 3.10 or newer is required.
+- `birth_start` and `birth_end` must be supplied together or both omitted.
+- Accepted date inputs are `datetime.date`, `YYYY`, `YYYY-MM`, and `YYYY-MM-DD`.
+- A year or month expands to the full inclusive interval at the relevant boundary.
+- The package contains a `py.typed` marker and is distributed as an inline typed PEP 561 package.
+- Generated students are fictional; do not represent them as real people.

@@ -15,6 +15,11 @@ class Student:
         name: 学生姓名。
         gender: 学生性别。
         birthday: 学生出生日期。
+
+    Example:
+        >>> student = Student(1, "张三", "男", dt.date(2010, 3, 2))
+        >>> student.name
+        '张三'
     """
 
     number: int
@@ -28,8 +33,13 @@ class Student:
         Args:
             on_date: 用于计算年龄的日期。
 
-        Returns:
-            学生在指定日期的周岁。
+    Returns:
+        学生在指定日期的周岁。
+
+        Example:
+            >>> student = Student(1, "张三", "男", dt.date(2010, 3, 2))
+            >>> student.age_on(dt.date(2026, 3, 1))
+            15
         """
 
         birthday_has_passed = (on_date.month, on_date.day) >= (
@@ -48,6 +58,12 @@ class ClassRoster:
         birth_start: 指定的出生日期范围起点；未限定时为 ``None``。
         birth_end: 指定的出生日期范围终点；未限定时为 ``None``。
         students: 班级学生，按学号排列。
+
+    Example:
+        >>> student = Student(1, "张三", "男", dt.date(2010, 3, 2))
+        >>> roster = ClassRoster(dt.date(2026, 8, 19), None, None, (student,))
+        >>> len(roster.students)
+        1
     """
 
     as_of: dt.date
@@ -58,8 +74,14 @@ class ClassRoster:
     def render(self) -> str:
         """将班级花名册渲染为适合终端输出的文本。
 
-        Returns:
-            包含班级摘要和全体学生信息的多行文本。
+    Returns:
+        包含班级摘要和全体学生信息的多行文本。
+
+        Example:
+            >>> student = Student(1, "张三", "男", dt.date(2010, 3, 2))
+            >>> roster = ClassRoster(dt.date(2026, 8, 19), None, None, (student,))
+            >>> "班级人数：1 人" in roster.render()
+            True
         """
 
         birth_range = "未限定"

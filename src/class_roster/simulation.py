@@ -15,7 +15,12 @@ BirthDateInput: TypeAlias = dt.date | str
 
 
 def _normalize_birth_boundary(value: BirthDateInput, *, is_end: bool) -> dt.date:
-    """将年、年月或完整日期转换为出生日期范围边界。"""
+    """将年、年月或完整日期转换为出生日期范围边界。
+
+    Example:
+        >>> _normalize_birth_boundary("2014-02", is_end=True)
+        datetime.date(2014, 2, 28)
+    """
 
     if isinstance(value, dt.datetime):
         return value.date()
@@ -54,6 +59,10 @@ def normalize_birth_range(
 
     起止值必须同时提供或同时省略。年份会扩展为完整年度，年月会扩展为
     对应月份的第一天或最后一天。
+
+    Example:
+        >>> normalize_birth_range("2014-03", "2014-05")
+        (datetime.date(2014, 3, 1), datetime.date(2014, 5, 31))
     """
 
     if (birth_start is None) != (birth_end is None):
@@ -69,7 +78,12 @@ def normalize_birth_range(
 
 
 def _to_date(value: Any) -> dt.date:
-    """将依赖包返回的日期值转换为 ``datetime.date``。"""
+    """将依赖包返回的日期值转换为 ``datetime.date``。
+
+    Example:
+        >>> _to_date(dt.datetime(2010, 3, 2, 12, 30))
+        datetime.date(2010, 3, 2)
+    """
 
     if isinstance(value, dt.datetime):
         return value.date()
@@ -106,6 +120,17 @@ def simulate_class(
 
     Raises:
         ValueError: 人数或出生日期范围无效，或依赖包返回的数据量不正确。
+
+    Example:
+        >>> roster = simulate_class(
+        ...     size=2,
+        ...     seed=7,
+        ...     as_of=dt.date(2026, 8, 19),
+        ...     birth_start="2008",
+        ...     birth_end="2010",
+        ... )
+        >>> len(roster.students)
+        2
     """
 
     if size < 1:

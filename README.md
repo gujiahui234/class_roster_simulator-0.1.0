@@ -134,6 +134,16 @@ roster = simulate_class(
 
 如果不传 `birth_start` 和 `birth_end`，主程序不会附加固定年级的出生日期限制。
 
+## 可运行脚手架
+
+仓库的 `examples/basic_roster.py` 是一个带类型提示和命令行参数的最小应用脚手架。安装本包后可直接运行：
+
+```powershell
+python examples\basic_roster.py --size 5 --seed 2026
+```
+
+本包随 wheel 分发 `py.typed` 标记，类型检查器可按 PEP 561 读取内联类型提示。
+
 ## 底层生成器扩展功能
 
 项目依赖的 `alt_generate_zh_name.generate()` 还支持指定姓氏和名字长度，并返回列名为
@@ -182,10 +192,15 @@ python -m pytest
 ├── pyproject.toml
 ├── requirements.txt
 ├── README.md
+├── llms.txt
+├── AI_USAGE.md
+├── examples/
+│   └── basic_roster.py
 ├── src/
 │   └── class_roster/
 │       ├── cli.py
 │       ├── models.py
+│       ├── py.typed
 │       └── simulation.py
 └── tests/
 ```

@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "class-roster-simulator"
-version = "0.1.1"
+version = "0.2.0"
 description = "按指定出生日期范围模拟班级成员并打印花名册"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -29,7 +29,10 @@ packages = ["src/class_roster"]
 
 [tool.hatch.build.targets.sdist]
 include = [
+    "/AI_USAGE.md",
     "/README.md",
+    "/examples",
+    "/llms.txt",
     "/pyproject.toml",
     "/requirements.txt",
     "/src",
